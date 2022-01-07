@@ -54,7 +54,7 @@ export function App() {
   const calculateText = () => {
     if (numberSequence.length > 0) {
       setLoading(true);
-      axios.post("http://localhost:3000/parseNumbers", {
+      axios.post("https://t9api.matejtarca.sk/parseNumbers", {
           numbers: numberSequence,
           useDict: useDict
       })
