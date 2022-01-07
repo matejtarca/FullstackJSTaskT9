@@ -1,6 +1,7 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import { Keyboard } from './components/PhoneKeyboard';
+import { WordsList } from './components/WordsList';
 import Text from "@kiwicom/orbit-components/lib/Text";
 import Box from "@kiwicom/orbit-components/lib/Box";
 import Grid from "@kiwicom/orbit-components/lib/utils/Grid";
@@ -14,8 +15,9 @@ const valueNumbers = ["2", "3", "4", "5", "6", "7", "8", "9"]
 
 export function App() {
   const [numberSequence, setNumberSequence] = useState("");
-  const [fieldText, setFieldText] = useState("");
+  const [chosenWord, setChosenWord] = useState("");
   const [useDict, setUseDict] = useState(true);
+  const [wordList, setWordList] = useState([]);
 
   useEffect(() => {
     if (numberSequence) {
@@ -29,6 +31,10 @@ export function App() {
       setNumberSequence(prevNumberSequence => prevNumberSequence + number)
     }     
   }
+
+  const handleWordClick = (word) => {
+    setChosenWord(word);
+  }
   
   const calculateText = () => {
     axios.post("http://localhost:3000/parseNumbers", {
@@ -38,21 +44,25 @@ export function App() {
     .then((res) => {
       const words = res.data.words
       if (words) {
-        setFieldText(words[0]);
+        setChosenWord(words[0]);
+      } else {
+        setChosenWord("");
       }
+      setWordList(words);
     })
   }
 
   return (
-    <Layout type="MMB">
+    <Layout type="Booking">
       <LayoutColumn>
         <InputField 
           readOnly={true}
-          value={fieldText}
+          value={chosenWord}
         />
-        <Box padding="large">
-          <Keyboard onKeyClick={handleKeyboardClick}/>
-        </Box>        
+        <Keyboard onKeyClick={handleKeyboardClick}/>    
+      </LayoutColumn>
+      <LayoutColumn>
+        <WordsList words={wordList} onWordClick={handleWordClick}/>
       </LayoutColumn>
     </Layout>
   );
