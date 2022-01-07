@@ -1,5 +1,8 @@
 import './App.css';
+
 import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import { Keyboard } from './components/PhoneKeyboard';
 import { WordsList } from './components/WordsList';
 import Text from "@kiwicom/orbit-components/lib/Text";
@@ -11,21 +14,18 @@ import Layout, { LayoutColumn } from "@kiwicom/orbit-components/lib/Layout";
 import InputField from "@kiwicom/orbit-components/lib/InputField";
 import { ChevronLeft } from "@kiwicom/orbit-components/icons";
 import Switch from "@kiwicom/orbit-components/lib/Switch";
-import axios from 'axios';
-import { number } from 'prop-types';
+import Heading from "@kiwicom/orbit-components/lib/Heading";
+import Loading from "@kiwicom/orbit-components/lib/Loading";
 
 // Numbers that can contain letters in the keyboard
 const valueNumbers = ["2", "3", "4", "5", "6", "7", "8", "9"]
-
-function isNumeric(value) {
-  return /^-?\d+$/.test(value);
-}
 
 export function App() {
   const [numberSequence, setNumberSequence] = useState("");
   const [chosenWord, setChosenWord] = useState("");
   const [useDict, setUseDict] = useState(true);
   const [wordList, setWordList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     calculateText()
@@ -47,11 +47,13 @@ export function App() {
   }
 
   const handeUseDictChange = () => {
-    setUseDict(prevUseDict => !prevUseDict)
+    setUseDict(prevUseDict => !prevUseDict);
+    clearWords();
   }
   
   const calculateText = () => {
-    if (numberSequence) {
+    if (numberSequence.length > 0) {
+      setLoading(true);
       axios.post("http://localhost:3000/parseNumbers", {
           numbers: numberSequence,
           useDict: useDict
@@ -67,44 +69,74 @@ export function App() {
           })
         }
         setWordList(words);
+        setLoading(false);
       })
     } else {
-      setChosenWord("");
-      setWordList([]);
+      clearWords()
     }
+  }
 
+  const clearWords = () => {
+    setChosenWord("");
+    setWordList([]);
+    setNumberSequence("");
+  }
+
+  let wordListComponent;
+  if (loading) {
+    wordListComponent = <Loading />
+  } else {
+    wordListComponent = <WordsList words={wordList} onWordClick={handleWordClick}/>
   }
 
   return (
-    <Layout type="Booking">
-      <LayoutColumn>
-        <Stack
-          direction="row"
-          spacing="medium"
-        >
-          <InputField 
-            readOnly={true}
-            value={chosenWord}
-          />
-          <Button onClick={handleDeleteClick}><ChevronLeft /></Button>
-        </Stack>
-        <Box padding="XXXLarge">
-          <Keyboard onKeyClick={handleKeyboardClick}/>    
+    <Box 
+      padding="medium" 
+      display="flex" 
+      align="center" 
+      direction="column" 
+      height="100vh">
+        <Box 
+          elevation='raised'
+          borderRadius="large"
+          padding="small"
+          display="flex" 
+          align="center" 
+          justify="center"
+          direction="column"
+          background="productLight">
+          <Box padding="small"><Heading type="display">T9 keyboard</Heading></Box>
+          <Layout type="Booking">
+            <LayoutColumn>
+              <Stack
+                direction="row"
+                spacing="medium"
+              >
+                <InputField 
+                  readOnly={true}
+                  value={chosenWord}
+                />
+                <Button onClick={handleDeleteClick}><ChevronLeft /></Button>
+              </Stack>
+              <Box padding="XXXLarge">
+                <Keyboard onKeyClick={handleKeyboardClick}/>    
+              </Box>
+            </LayoutColumn>
+            <LayoutColumn>
+            <Stack align="center">
+              <Switch
+                ariaLabelledby="usedict"
+                checked={useDict}
+                onChange={handeUseDictChange}
+              />
+              <Text id="usedict">
+                Use dictionary
+              </Text>
+            </Stack>
+              { wordListComponent }
+            </LayoutColumn>
+          </Layout>
         </Box>
-      </LayoutColumn>
-      <LayoutColumn>
-      <Stack align="center">
-        <Switch
-          ariaLabelledby="usedict"
-          checked={useDict}
-          onChange={handeUseDictChange}
-        />
-        <Text id="usedict">
-          Use dictionary
-        </Text>
-      </Stack>
-        <WordsList words={wordList} onWordClick={handleWordClick}/>
-      </LayoutColumn>
-    </Layout>
+      </Box>
   );
 }
