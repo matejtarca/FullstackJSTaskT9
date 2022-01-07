@@ -9,7 +9,8 @@ import Stack from "@kiwicom/orbit-components/lib/Stack";
 import Button from "@kiwicom/orbit-components/lib/Button";
 import Layout, { LayoutColumn } from "@kiwicom/orbit-components/lib/Layout";
 import InputField from "@kiwicom/orbit-components/lib/InputField";
-import { ChevronLeft } from "@kiwicom/orbit-components/icons"
+import { ChevronLeft } from "@kiwicom/orbit-components/icons";
+import Switch from "@kiwicom/orbit-components/lib/Switch";
 import axios from 'axios';
 import { number } from 'prop-types';
 
@@ -28,7 +29,7 @@ export function App() {
 
   useEffect(() => {
     calculateText()
-  }, [numberSequence])
+  }, [numberSequence, useDict])
 
 
   const handleKeyboardClick = (number) => {
@@ -43,6 +44,10 @@ export function App() {
 
   const handleDeleteClick = () => {
     setNumberSequence(prevNumberSequence => prevNumberSequence.slice(0, prevNumberSequence.length - 1))
+  }
+
+  const handeUseDictChange = () => {
+    setUseDict(prevUseDict => !prevUseDict)
   }
   
   const calculateText = () => {
@@ -88,6 +93,16 @@ export function App() {
         </Box>
       </LayoutColumn>
       <LayoutColumn>
+      <Stack align="center">
+        <Switch
+          ariaLabelledby="usedict"
+          checked={useDict}
+          onChange={handeUseDictChange}
+        />
+        <Text id="usedict">
+          Use dictionary
+        </Text>
+      </Stack>
         <WordsList words={wordList} onWordClick={handleWordClick}/>
       </LayoutColumn>
     </Layout>
