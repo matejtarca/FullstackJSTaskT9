@@ -8,7 +8,7 @@ export function WordsList(props) {
             key={word}
             title={word} 
             onClick={() => props.onWordClick(word)}
-            dataTest={`"wordChoice-${word}`}
+            dataTest={`wordChoice-${word}`}
         />
     )
     return (
@@ -19,7 +19,9 @@ export function WordsList(props) {
             >
                 List of possible words:
             </Text>
+            <Box dataTest="wordChoiceList">
             { choices }
+            </Box>
         </Box>
         
     )
