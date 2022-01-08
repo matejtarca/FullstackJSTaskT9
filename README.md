@@ -17,7 +17,7 @@ API is running at https://t9api.matejtarca.sk
 **Testing:** Mocha, Chai  
 
 ### Endpoints
-**/parseNumbers**
+**`/parseNumbers`**
 - **Method:** `POST`
 - **Params:**
     - `numbers[string]` - specifies the string of numbers to be converted to list of possible words
@@ -37,7 +37,7 @@ axios.post("{API_URL}/parseNumbers", {
 ```
 
 ### Running locally
-To run locally create `.env` file in the `t9api/` directory and specify port for the api to run at. Example of .env file:
+To run the API locally create `.env` file in the `t9api/` directory and specify port for the API to run at. Example of .env file:
 ```
 PORT=3000
 ```
@@ -47,7 +47,7 @@ npm install
 npm start
 ```
 ### Running tests locally
-To run unit tests use the `npm test` command  
+To run the unit tests for the API use the `npm test` command  
 
 ## t9ui
 
@@ -56,19 +56,19 @@ To run unit tests use the `npm test` command
 **Testing**: Jest, React Testing Library
 
 ### Running locally
-To first start the WebApp run these commands in the `t9ui/` directory
+To start the web app run these commands in the `t9ui/` directory
 ```bash
 npm install
 npm start
 ```
 ### Running tests locally
-To run unit tests use the `npm test` command
+To run the unit tests for the React components use the `npm test` command
 
 ## t9tests
+This part of project contains `cypress` e2e integration tests for the app.
 ### Technologies
 **Testing**: Cypress.io
 
-This part of project contains `cypress` e2e integration tests for the app.
 ### Running tests locally
 To run e2e tests locally make sure you have installed cypress correctly (it may take a while) and then run
 ```bash
