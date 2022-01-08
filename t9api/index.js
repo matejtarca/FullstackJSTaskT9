@@ -19,3 +19,5 @@ app.use('/', parseNumbersRoute)
 // START THE SERVER
 app.listen(port);
 console.log('Magic happens on port ' + port);
+
+module.exports = app;
