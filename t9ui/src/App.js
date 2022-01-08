@@ -16,16 +16,18 @@ import { ChevronLeft } from "@kiwicom/orbit-components/icons";
 import Switch from "@kiwicom/orbit-components/lib/Switch";
 import Heading from "@kiwicom/orbit-components/lib/Heading";
 import Loading from "@kiwicom/orbit-components/lib/Loading";
+import Tooltip from "@kiwicom/orbit-components/lib/Tooltip";
 
 // Numbers that can contain letters in the keyboard
 const valueNumbers = ["2", "3", "4", "5", "6", "7", "8", "9"]
 
 export function App() {
   const [numberSequence, setNumberSequence] = useState("");
-  const [chosenWord, setChosenWord] = useState("");
+  const [fieldText, setFieldText] = useState("");
   const [useDict, setUseDict] = useState(true);
   const [wordList, setWordList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [history, setHistory] = useState([]);
 
   useEffect(() => {
     calculateText()
@@ -34,21 +36,37 @@ export function App() {
 
   const handleKeyboardClick = (number) => {
     if (valueNumbers.includes(number)) {
+      setHistory(prevHistory => 
+        [...prevHistory,
+          {
+            numberSequence: numberSequence,
+            fieldText: fieldText
+          }])
       setNumberSequence(prevNumberSequence => prevNumberSequence + number)
+      setFieldText("")
     }     
   }
 
   const handleWordClick = (word) => {
-    setChosenWord(word);
+    setFieldText(word);
   }
 
   const handleDeleteClick = () => {
-    setNumberSequence(prevNumberSequence => prevNumberSequence.slice(0, prevNumberSequence.length - 1))
+    if (history.length > 0) {
+      const lastState = history[history.length - 1]
+      setNumberSequence(lastState.numberSequence)
+      setFieldText(lastState.fieldText)
+      setHistory(prevHistory => prevHistory.slice(0, prevHistory.length - 1))
+    } else {
+      setNumberSequence("")
+      setWordList([])
+      setFieldText("")
+    }
   }
 
   const handeUseDictChange = () => {
     setUseDict(prevUseDict => !prevUseDict);
-    clearWords();
+    setFieldText("");
   }
   
   const calculateText = () => {
@@ -60,26 +78,24 @@ export function App() {
       })
       .then((res) => {
         const words = res.data.words
-        if (words.length > 0) {
-          setChosenWord(words[0]);
-        } else {
-          setChosenWord(prevWord => {
-            const prevWordText = prevWord.replace(/\d+/, "")
-            return prevWordText + numberSequence.slice(prevWordText.length, numberSequence.length)
-          })
-        }
+        if (!fieldText) {
+          if (words.length > 0) {
+            setFieldText(words[0]);
+          } else {
+            let prevFieldText = "";
+            if (history.length > 0) {
+              prevFieldText = history[history.length - 1].fieldText
+            }
+            setFieldText(prevFieldText + numberSequence.slice(prevFieldText.length, numberSequence.length))
+          }
+        }        
         setWordList(words);
         setLoading(false);
       })
     } else {
-      clearWords()
+      setFieldText("");
+      setWordList([]);
     }
-  }
-
-  const clearWords = () => {
-    setChosenWord("");
-    setWordList([]);
-    setNumberSequence("");
   }
 
   let wordListComponent;
@@ -114,24 +130,28 @@ export function App() {
               >
                 <InputField 
                   readOnly={true}
-                  value={chosenWord}
+                  value={fieldText}
                 />
                 <Button onClick={handleDeleteClick}><ChevronLeft /></Button>
               </Stack>
-              <Box padding="XXXLarge">
+              <Box padding="large">
                 <Keyboard onKeyClick={handleKeyboardClick}/>    
               </Box>
             </LayoutColumn>
             <LayoutColumn>
             <Stack align="center">
-              <Switch
-                ariaLabelledby="usedict"
-                checked={useDict}
-                onChange={handeUseDictChange}
-              />
-              <Text id="usedict">
-                Use dictionary
-              </Text>
+                <Stack direction='row' justify='start' align='center'>
+                  <Switch
+                    ariaLabelledby="usedict"
+                    checked={useDict}
+                    onChange={handeUseDictChange}
+                  />
+                <Tooltip content="Toggle on to use dictionary for predictions">
+                  <Text id="usedict">
+                    Use dictionary
+                  </Text>
+                  </Tooltip>
+                </Stack>
             </Stack>
               { wordListComponent }
             </LayoutColumn>
