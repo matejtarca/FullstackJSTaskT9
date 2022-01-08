@@ -21,7 +21,7 @@ API is running at https://t9api.matejtarca.sk
 - **Method:** `POST`
 - **Params:**
     - `numbers[string]` - specifies the string of numbers to be converted to list of possible words
-    - `useDict[boolean]` - specifies usage of dictionary when producing the input. When `true` only words present in the dictionry will be in output. The dictionary consists of 20,000 most common english words.
+    - `useDict[boolean]` - specifies usage of dictionary when producing the input. When `true` only words present in the dictionary will be in the output. The dictionary consists of 20,000 most common english words.
 - **Success response** 
     - Code: 200
     - `{ words : [<array of possible words>] }`
@@ -37,11 +37,11 @@ axios.post("{API_URL}/parseNumbers", {
 ```
 
 ### Running locally
-To run the API locally create `.env` file in the `t9api/` directory and specify port for the API to run at. Example of .env file:
+To run the API locally create `.env` file in the `t9api/` directory and specify the port for the API to run at. Example of .env file:
 ```
 PORT=3000
 ```
-To first start the API run these commands in the `t9api/` directory
+To start the API run these commands in the `t9api/` directory
 ```bash
 npm install
 npm start
@@ -56,6 +56,10 @@ To run the unit tests for the API use the `npm test` command
 **Testing**: Jest, React Testing Library
 
 ### Running locally
+To run the web app locally create `.env` file in the `t9ui/` directory and specify the url for the backend API. Example of .env file:
+```
+REACT_APP_API_URL=http://localhost:3000
+```
 To start the web app run these commands in the `t9ui/` directory
 ```bash
 npm install
@@ -65,18 +69,18 @@ npm start
 To run the unit tests for the React components use the `npm test` command
 
 ## t9tests
-This part of project contains `cypress` e2e integration tests for the app.
+This part of the project contains cypress e2e integration tests for the app.
 ### Technologies
 **Testing**: Cypress.io
 
 ### Running tests locally
-To run e2e tests locally make sure you have installed cypress correctly (it may take a while) and then run
+To run the e2e tests locally make sure you have installed cypress correctly (it may take a while) and then run
 ```bash
 npm install
 npm run cypress run
 ```
-Top open interactive cypress window use `npm run cypress open`
+To open the interactive cypress window use `npm run cypress open`
 
 ---
-*This project was created as part of interview process*
+*This project was created as part of an interview process*
 
