@@ -7,7 +7,6 @@ import { Keyboard } from './components/PhoneKeyboard';
 import { WordsList } from './components/WordsList';
 import Text from "@kiwicom/orbit-components/lib/Text";
 import Box from "@kiwicom/orbit-components/lib/Box";
-import Grid from "@kiwicom/orbit-components/lib/utils/Grid";
 import Stack from "@kiwicom/orbit-components/lib/Stack";
 import Button from "@kiwicom/orbit-components/lib/Button";
 import Layout, { LayoutColumn } from "@kiwicom/orbit-components/lib/Layout";
