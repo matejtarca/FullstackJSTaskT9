@@ -8,6 +8,7 @@ export function WordsList(props) {
             key={word}
             title={word} 
             onClick={() => props.onWordClick(word)}
+            dataTest={`"wordChoice-${word}`}
         />
     )
     return (

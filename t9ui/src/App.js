@@ -110,7 +110,8 @@ export function App() {
       display="flex" 
       align="center" 
       direction="column" 
-      height="100vh">
+      height="100vh"
+      >
         <Box 
           elevation='raised'
           borderRadius="large"
@@ -120,7 +121,7 @@ export function App() {
           justify="center"
           direction="column"
           background="productLight">
-          <Box padding="small"><Heading type="display">T9 keyboard</Heading></Box>
+          <Box padding="small"><Heading type="display" dataTest="heading">T9 keyboard</Heading></Box>
           <Layout type="Booking">
             <LayoutColumn>
               <Stack
@@ -130,8 +131,9 @@ export function App() {
                 <InputField 
                   readOnly={true}
                   value={fieldText}
+                  dataTest="inputField"
                 />
-                <Button onClick={handleDeleteClick}><ChevronLeft /></Button>
+                <Button onClick={handleDeleteClick} dataTest="deleteButton"><ChevronLeft /></Button>
               </Stack>
               <Box padding="large">
                 <Keyboard onKeyClick={handleKeyboardClick}/>    
@@ -144,6 +146,7 @@ export function App() {
                     ariaLabelledby="usedict"
                     checked={useDict}
                     onChange={handeUseDictChange}
+                    dataTest="dictSwitch"
                   />
                 <Tooltip content="Toggle on to use dictionary for predictions">
                   <Text id="usedict">

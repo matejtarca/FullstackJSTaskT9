@@ -23,6 +23,7 @@ export function Keyboard(props) {
             number={button.number} 
             letters={button.letters}
             onClick={() => props.onKeyClick(button.number)}
+            dataTest={`phoneButton-${button.number}`}
         />
     )
     return (
