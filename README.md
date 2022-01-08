@@ -81,6 +81,11 @@ npm run cypress run
 ```
 To open the interactive cypress window use `npm run cypress open`
 
+## Possible future improvements
+- Connect all three groups of tests with CI/CD and Github Actions
+- Implement new parameter for API to specify maximum number of generated words, and make the setting available in the UI
+- Refactor the code to use TypeScript (especially API)
+
 ---
 *This project was created as part of an interview process*
 
