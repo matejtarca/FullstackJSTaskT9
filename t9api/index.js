@@ -18,6 +18,6 @@ app.use('/', parseNumbersRoute)
 
 // START THE SERVER
 app.listen(port);
-console.log('Magic happens on port ' + port);
+console.log('API running on port ' + port);
 
 module.exports = app;
